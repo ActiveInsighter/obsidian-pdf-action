@@ -5,6 +5,7 @@ import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 import markdownItTaskLists from 'markdown-it-task-lists';
 import hljs from 'highlight.js';
+import katex from 'katex';
 import puppeteer from 'puppeteer';
 
 const args = process.argv.slice(2);
@@ -27,6 +28,10 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function escapeRegExp(str) {
+  return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function extractTitle(markdown) {
   const match = markdown.match(/^#\s+(.+)$/m);
   return match ? match[1].trim() : path.basename(inputFile);
@@ -43,6 +48,58 @@ function normalizeObsidianLinks(markdown) {
       const label = alias?.trim() || target.trim();
       return label;
     });
+}
+
+function renderKatex(tex, displayMode) {
+  return katex.renderToString(tex.trim(), {
+    displayMode,
+    throwOnError: false,
+    strict: false,
+    output: 'htmlAndMathml'
+  });
+}
+
+function protectMath(markdown) {
+  const mathItems = [];
+
+  function store(tex, displayMode) {
+    const token = `MATHPLACEHOLDER${mathItems.length}TOKEN`;
+    mathItems.push({ token, html: renderKatex(tex, displayMode), displayMode });
+    return displayMode ? `\n\n${token}\n\n` : token;
+  }
+
+  function protectPart(part) {
+    return part
+      .replace(/\\\[([\s\S]*?)\\\]/g, (_, tex) => store(tex, true))
+      .replace(/\$\$([\s\S]*?)\$\$/g, (_, tex) => store(tex, true))
+      .replace(/\\\(([\s\S]*?)\\\)/g, (_, tex) => store(tex, false))
+      .replace(/(^|[^\\])\$(?!\$)([^$\n]+?)(?<!\\)\$/g, (_, prefix, tex) => `${prefix}${store(tex, false)}`);
+  }
+
+  const parts = markdown.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
+  const protectedMarkdown = parts
+    .map((part) => (/^```|^~~~/.test(part) ? part : protectPart(part)))
+    .join('');
+
+  return { markdown: protectedMarkdown, mathItems };
+}
+
+function restoreMath(html, mathItems) {
+  let restored = html;
+
+  for (const item of mathItems) {
+    const token = escapeHtml(item.token);
+    const paragraphPattern = new RegExp(`<p>\\s*${escapeRegExp(token)}\\s*</p>`, 'g');
+    restored = restored.replace(paragraphPattern, item.html);
+    restored = restored.replaceAll(token, item.html);
+  }
+
+  return restored;
+}
+
+function rewriteKatexCssUrls(katexCss) {
+  const fontsDirUrl = pathToFileURL(path.resolve(projectRoot, 'node_modules/katex/dist/fonts') + path.sep).href;
+  return katexCss.replace(/url\(fonts\//g, `url(${fontsDirUrl}`);
 }
 
 async function readOptionalFile(filePath) {
@@ -72,7 +129,7 @@ function createMarkdownRenderer() {
     .use(markdownItTaskLists, { enabled: true, label: true, labelAfter: true });
 }
 
-function buildHtml({ title, renderedMarkdown, customCss, katexCss, highlightCss, katexJs, autoRenderJs }) {
+function buildHtml({ title, renderedMarkdown, customCss, katexCss, highlightCss }) {
   const baseHref = pathToFileURL(projectRoot + path.sep).href;
 
   return `<!doctype html>
@@ -90,8 +147,6 @@ function buildHtml({ title, renderedMarkdown, customCss, katexCss, highlightCss,
   <main class="markdown-preview-view markdown-rendered">
 ${renderedMarkdown}
   </main>
-  <script>${katexJs}</script>
-  <script>${autoRenderJs}</script>
   <script>
     function enhanceCallouts() {
       document.querySelectorAll('blockquote').forEach((blockquote) => {
@@ -107,9 +162,8 @@ ${renderedMarkdown}
         const title = match[2] || match[1].toUpperCase();
         blockquote.classList.add('callout', 'callout-' + type);
 
-        first.innerHTML = first.innerHTML
-          .replace(/^\\[![^\\]]+\\]\\s*[^<]*(<br>)?/i, '')
-          .trim();
+        const htmlLines = first.innerHTML.split(/(?:\\r?\\n|<br\\s*\\/?>)/i);
+        first.innerHTML = htmlLines.slice(1).join('<br>').trim();
 
         const titleNode = document.createElement('div');
         titleNode.className = 'callout-title';
@@ -119,18 +173,6 @@ ${renderedMarkdown}
     }
 
     enhanceCallouts();
-
-    renderMathInElement(document.body, {
-      throwOnError: false,
-      strict: false,
-      ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-      delimiters: [
-        { left: '\\\\[', right: '\\\\]', display: true },
-        { left: '\\\\(', right: '\\\\)', display: false },
-        { left: '$$', right: '$$', display: true },
-        { left: '$', right: '$', display: false }
-      ]
-    });
   </script>
 </body>
 </html>`;
@@ -140,19 +182,19 @@ async function main() {
   await fs.mkdir(outputDir, { recursive: true });
 
   const markdownRaw = await fs.readFile(inputPath, 'utf8');
-  const markdown = normalizeObsidianLinks(markdownRaw);
-  const title = extractTitle(markdown);
+  const normalizedMarkdown = normalizeObsidianLinks(markdownRaw);
+  const title = extractTitle(normalizedMarkdown);
+  const protectedMath = protectMath(normalizedMarkdown);
 
   const md = createMarkdownRenderer();
-  const renderedMarkdown = md.render(markdown);
+  const renderedMarkdown = restoreMath(md.render(protectedMath.markdown), protectedMath.mathItems);
 
   const customCss = await readOptionalFile(stylePath);
-  const katexCss = await fs.readFile(path.resolve(projectRoot, 'node_modules/katex/dist/katex.min.css'), 'utf8');
-  const katexJs = await fs.readFile(path.resolve(projectRoot, 'node_modules/katex/dist/katex.min.js'), 'utf8');
-  const autoRenderJs = await fs.readFile(path.resolve(projectRoot, 'node_modules/katex/dist/contrib/auto-render.min.js'), 'utf8');
+  const rawKatexCss = await fs.readFile(path.resolve(projectRoot, 'node_modules/katex/dist/katex.min.css'), 'utf8');
+  const katexCss = rewriteKatexCssUrls(rawKatexCss);
   const highlightCss = await fs.readFile(path.resolve(projectRoot, 'node_modules/highlight.js/styles/github-dark.min.css'), 'utf8');
 
-  const html = buildHtml({ title, renderedMarkdown, customCss, katexCss, highlightCss, katexJs, autoRenderJs });
+  const html = buildHtml({ title, renderedMarkdown, customCss, katexCss, highlightCss });
   await fs.writeFile(outputHtmlPath, html, 'utf8');
   console.log(`HTML written to ${path.relative(projectRoot, outputHtmlPath)}`);
 
