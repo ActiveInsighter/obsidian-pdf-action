@@ -24,16 +24,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-
       - name: Record run start
         run: node scripts/record-run-state.mjs start
 
       - name: Commit run start
+        continue-on-error: true
         run: node scripts/git-commit-state.mjs "Record workflow start [skip ci]"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
       - name: Install dependencies, fonts, and Chrome
         run: |
@@ -50,14 +51,12 @@ jobs:
           echo "" | tee -a .github/latest-build-log.txt
           echo "## Chrome setup" | tee -a .github/latest-build-log.txt
           CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
-          if [ -n "$CHROME_PATH" ]; then
-            echo "Using system Chrome: $CHROME_PATH" | tee -a .github/latest-build-log.txt
-            echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
-          else
-            echo "System Chrome not found. Cleaning Puppeteer Chrome cache and installing pinned Chrome." | tee -a .github/latest-build-log.txt
-            rm -rf ~/.cache/puppeteer/chrome
-            npx puppeteer browsers install chrome --install-deps 2>&1 | tee -a .github/latest-build-log.txt
+          if [ -z "$CHROME_PATH" ]; then
+            echo "Chrome executable was not found on the runner." | tee -a .github/latest-build-log.txt
+            exit 1
           fi
+          echo "Using system Chrome: $CHROME_PATH" | tee -a .github/latest-build-log.txt
+          echo "PUPPETEER_EXECUTABLE_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
 
       - name: Build PDF
         id: build_pdf
@@ -93,4 +92,7 @@ jobs:
         env:
           BUILD_OUTCOME: ${{ steps.build_pdf.outcome }}
           ARTIFACT_OUTCOME: ${{ steps.upload_artifact.outcome }}
-        run: node -e "process.exit(process.env.BUILD_OUTCOME === 'success' && process.env.ARTIFACT_OUTCOME === 'success' ? 0 : 1)"
+        run: |
+          if [ "$BUILD_OUTCOME" != "success" ] || [ "$ARTIFACT_OUTCOME" != "success" ]; then
+            exit 1
+          fi
