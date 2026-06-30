@@ -97,16 +97,19 @@ ${renderedMarkdown}
       document.querySelectorAll('blockquote').forEach((blockquote) => {
         const first = blockquote.querySelector('p, li, div');
         if (!first) return;
+
         const rawText = first.textContent.trim();
-        const match = rawText.match(/^\\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|INFO|QUESTION|EXAMPLE|QUOTE|BUG|SUCCESS|FAILURE|DANGER)\\]\s*(.*)$/i);
+        const firstLine = rawText.split(/\\n/)[0].trim();
+        const match = firstLine.match(/^\\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION|INFO|QUESTION|EXAMPLE|QUOTE|BUG|SUCCESS|FAILURE|DANGER)\\]\\s*(.*)$/i);
         if (!match) return;
 
         const type = match[1].toLowerCase();
         const title = match[2] || match[1].toUpperCase();
         blockquote.classList.add('callout', 'callout-' + type);
 
-        const html = first.innerHTML;
-        first.innerHTML = html.replace(/^\\[![^\\]]+\\]\s*[^<]*/, '');
+        first.innerHTML = first.innerHTML
+          .replace(/^\\[![^\\]]+\\]\\s*[^<]*(<br>)?/i, '')
+          .trim();
 
         const titleNode = document.createElement('div');
         titleNode.className = 'callout-title';
