@@ -1,0 +1,18 @@
+{
+  "name": "obsidian-pdf-action",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:pdf": "node scripts/build-pdf.mjs notes.md dist/notes.pdf",
+    "build:html": "node scripts/build-pdf.mjs notes.md dist/notes.pdf --html-only"
+  },
+  "devDependencies": {
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-task-lists": "^2.1.1",
+    "puppeteer": "^24.11.2"
+  }
+}
