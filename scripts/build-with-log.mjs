@@ -8,7 +8,7 @@ const logPath = path.resolve(projectRoot, '.github/latest-build-log.txt');
 
 await fsp.mkdir(path.dirname(logPath), { recursive: true });
 
-const logStream = fs.createWriteStream(logPath, { flags: 'w' });
+const logStream = fs.createWriteStream(logPath, { flags: 'a' });
 
 function write(chunk) {
   process.stdout.write(chunk);
@@ -20,7 +20,7 @@ function writeErr(chunk) {
   logStream.write(chunk);
 }
 
-write(`# Build log\n`);
+write(`\n## PDF build\n`);
 write(`started_at=${new Date().toISOString()}\n`);
 write(`command=node scripts/build-pdf.mjs notes.md dist/notes.pdf\n\n`);
 
