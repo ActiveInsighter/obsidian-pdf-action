@@ -40,10 +40,16 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install dependencies and Chrome
+      - name: Install dependencies, fonts, and Chrome
         run: |
           set -o pipefail
           : > .github/latest-build-log.txt
+          echo "## apt install CJK fonts" | tee -a .github/latest-build-log.txt
+          sudo apt-get update 2>&1 | tee -a .github/latest-build-log.txt
+          sudo apt-get install -y fonts-noto-cjk 2>&1 | tee -a .github/latest-build-log.txt
+          fc-cache -f 2>&1 | tee -a .github/latest-build-log.txt
+
+          echo "" | tee -a .github/latest-build-log.txt
           echo "## npm install" | tee -a .github/latest-build-log.txt
           npm install 2>&1 | tee -a .github/latest-build-log.txt
 
