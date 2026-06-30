@@ -40,12 +40,15 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install dependencies
+      - name: Install dependencies and Chrome
         run: |
           set -o pipefail
           : > .github/latest-build-log.txt
           echo "## npm install" | tee -a .github/latest-build-log.txt
           npm install 2>&1 | tee -a .github/latest-build-log.txt
+          echo "" | tee -a .github/latest-build-log.txt
+          echo "## npx puppeteer browsers install chrome" | tee -a .github/latest-build-log.txt
+          npx puppeteer browsers install chrome 2>&1 | tee -a .github/latest-build-log.txt
 
       - name: Build PDF
         run: |
