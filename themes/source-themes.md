@@ -2,6 +2,10 @@
 
 This folder records the theme research used to shape the PDF stylesheet. The PDF theme is rewritten for this repository instead of blindly copying an entire Obsidian app theme.
 
+## Active PDF theme
+
+`themes/obsidian-inspired.css` is currently a Minimal Light inspired PDF theme. It uses Minimal-style ideas: white background, narrow readable line width, restrained heading scale, subtle table rules, light callouts, and calm accent colors.
+
 ## Referenced themes
 
 | Theme | Repository | Why it is useful for this PDF template | License note |
@@ -13,4 +17,4 @@ This folder records the theme research used to shape the PDF stylesheet. The PDF
 
 ## Implementation note
 
-`themes/obsidian-inspired.css` is the active adapted PDF stylesheet. It borrows design ideas from the themes above, but is written specifically for Markdown-to-PDF output: print margins, page breaks, tables, callouts, code blocks, KaTeX, and CJK typography.
+The active stylesheet is written specifically for Markdown-to-PDF output: print margins, page breaks, tables, callouts, code blocks, KaTeX, and CJK typography. The original Minimal theme is a full Obsidian app theme, so this repository uses an adapted PDF-focused stylesheet rather than a direct full-theme copy.
