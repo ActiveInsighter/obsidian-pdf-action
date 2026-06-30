@@ -1,6 +1,6 @@
 ## npm install
 
-added 113 packages, and audited 114 packages in 8s
+added 113 packages, and audited 114 packages in 7s
 
 12 packages are looking for funding
   run `npm fund` for details
