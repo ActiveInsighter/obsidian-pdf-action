@@ -158,10 +158,18 @@ async function main() {
 
   if (htmlOnly) return;
 
-  const browser = await puppeteer.launch({
+  const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || process.env.CHROME_BIN;
+  const launchOptions = {
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
+  };
+
+  if (executablePath) {
+    launchOptions.executablePath = executablePath;
+    console.log(`Using Chrome executable: ${executablePath}`);
+  }
+
+  const browser = await puppeteer.launch(launchOptions);
 
   try {
     const page = await browser.newPage();
