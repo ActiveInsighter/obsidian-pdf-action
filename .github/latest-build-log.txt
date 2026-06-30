@@ -1,0 +1,23 @@
+## npm install
+
+added 113 packages, and audited 114 packages in 8s
+
+12 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+## npm run build:pdf
+
+> obsidian-pdf-action@1.0.0 build:pdf
+> node scripts/build-pdf.mjs notes.md dist/notes.pdf
+
+HTML written to dist/notes.html
+Error: Could not find Chrome (ver. 148.0.7778.97). This can occur if either
+ 1. you did not perform an installation before running the script (e.g. `npx puppeteer browsers install chrome`) or
+ 2. your cache path is incorrectly configured (which is: /home/runner/.cache/puppeteer).
+For (2), check out our guide on configuring puppeteer at https://pptr.dev/guides/configuration.
+    at ChromeLauncher.resolveExecutablePath (file:///home/runner/work/obsidian-pdf-action/obsidian-pdf-action/node_modules/puppeteer-core/lib/esm/puppeteer/node/BrowserLauncher.js:307:27)
+    at ChromeLauncher.computeLaunchArguments (file:///home/runner/work/obsidian-pdf-action/obsidian-pdf-action/node_modules/puppeteer-core/lib/esm/puppeteer/node/ChromeLauncher.js:86:24)
+    at async ChromeLauncher.launch (file:///home/runner/work/obsidian-pdf-action/obsidian-pdf-action/node_modules/puppeteer-core/lib/esm/puppeteer/node/BrowserLauncher.js:55:28)
+    at async main (file:///home/runner/work/obsidian-pdf-action/obsidian-pdf-action/scripts/build-pdf.mjs:161:19)
