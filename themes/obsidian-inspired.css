@@ -1,0 +1,276 @@
+/*
+  Obsidian-inspired PDF theme
+  References: Minimal, Things, Catppuccin, AnuPpuccin design ideas.
+  This file is written for this repository's Markdown -> HTML -> PDF pipeline.
+*/
+
+:root {
+  --obs-bg: #f4f6fb;
+  --obs-paper: #ffffff;
+  --obs-text: #242933;
+  --obs-muted: #6b7280;
+  --obs-faint: #9aa3af;
+  --obs-border: #d9e0eb;
+  --obs-border-soft: #e8edf5;
+  --obs-blue: #2e80f2;
+  --obs-pink: #d9468f;
+  --obs-green: #2f9e8f;
+  --obs-yellow: #b9872e;
+  --obs-orange: #d66a32;
+  --obs-red: #d64545;
+  --obs-purple: #8b72c9;
+  --obs-cyan: #1a9cb0;
+  --obs-code-bg: #282c34;
+  --obs-code-inline: #eef2f7;
+  --obs-shadow: 0 14px 40px rgba(31, 35, 40, 0.08);
+}
+
+html,
+body {
+  background: var(--obs-bg);
+}
+
+body {
+  color: var(--obs-text);
+  font-family: "Noto Serif CJK SC", "Noto Sans CJK SC", "Source Han Serif SC", "Microsoft YaHei", "PingFang SC", serif;
+  font-size: 15.4px;
+  line-height: 1.78;
+}
+
+.markdown-preview-view {
+  max-width: 880px;
+  margin: 30px auto;
+  padding: 44px 54px;
+  background: var(--obs-paper);
+  border: 1px solid var(--obs-border);
+  border-radius: 18px;
+  box-shadow: var(--obs-shadow);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.01em;
+  line-height: 1.34;
+  font-weight: 760;
+  break-after: avoid;
+}
+
+h1 {
+  font-size: 2.05em;
+  color: #1f2937;
+  border-bottom: 2px solid var(--obs-border);
+  padding-bottom: 0.34em;
+  page-break-before: always;
+}
+
+h1:first-child {
+  page-break-before: auto;
+}
+
+h2 {
+  font-size: 1.58em;
+  color: #253147;
+  border-left: 5px solid var(--obs-blue);
+  padding-left: 0.68em;
+}
+
+h3 { color: var(--obs-blue); }
+h4 { color: var(--obs-yellow); }
+h5 { color: var(--obs-red); }
+h6 { color: var(--obs-muted); }
+
+p {
+  margin: 0.66em 0;
+}
+
+strong {
+  color: #1f2937;
+  font-weight: 760;
+}
+
+em {
+  color: var(--obs-pink);
+}
+
+a {
+  color: var(--obs-blue);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(46, 128, 242, 0.25);
+}
+
+ul, ol {
+  padding-left: 1.45em;
+}
+
+li::marker {
+  color: var(--obs-blue);
+}
+
+li + li {
+  margin-top: 0.15em;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.85em 1em;
+  border-left: 5px solid var(--obs-green);
+  border-radius: 12px;
+  background: #f3faf8;
+  color: #41505d;
+  break-inside: avoid;
+}
+
+.callout {
+  position: relative;
+  border-left-width: 6px;
+  padding: 0.95em 1.05em;
+  background: #f6f8fc;
+  box-shadow: inset 0 0 0 1px rgba(217, 224, 235, 0.5);
+}
+
+.callout-title {
+  font-weight: 780;
+  margin-bottom: 0.28em;
+  color: #253147;
+}
+
+.callout-note,
+.callout-info {
+  border-left-color: var(--obs-blue);
+  background: #eff6ff;
+}
+
+.callout-tip,
+.callout-success {
+  border-left-color: var(--obs-green);
+  background: #eefaf6;
+}
+
+.callout-important,
+.callout-warning,
+.callout-caution,
+.callout-danger {
+  border-left-color: var(--obs-orange);
+  background: #fff5ec;
+}
+
+.callout-question,
+.callout-example {
+  border-left-color: var(--obs-purple);
+  background: #f6f2ff;
+}
+
+code {
+  font-family: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+  background: var(--obs-code-inline);
+  color: #243244;
+  border: 1px solid #dce3ee;
+  border-radius: 5px;
+  padding: 0.1em 0.32em;
+  font-size: 0.91em;
+}
+
+pre.hljs {
+  background: var(--obs-code-bg);
+  color: #e6edf3;
+  border-radius: 14px;
+  padding: 1em 1.1em;
+  margin: 1em 0;
+  line-height: 1.58;
+  font-size: 0.9em;
+  overflow-x: auto;
+  break-inside: avoid;
+}
+
+pre code {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1.05em 0;
+  font-size: 0.94em;
+  border: 1px solid var(--obs-border);
+  border-radius: 12px;
+  overflow: hidden;
+  break-inside: avoid;
+}
+
+th, td {
+  border-right: 1px solid var(--obs-border-soft);
+  border-bottom: 1px solid var(--obs-border-soft);
+  padding: 0.54em 0.68em;
+  vertical-align: top;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+th:last-child,
+td:last-child {
+  border-right: 0;
+}
+
+th {
+  background: #eef3fb;
+  color: #253147;
+  font-weight: 760;
+}
+
+tr:nth-child(even) td {
+  background: #fbfcff;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  margin: 1.08em auto;
+  border-radius: 10px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--obs-border);
+  margin: 2em 0;
+}
+
+.katex-display {
+  margin: 0.9em 0;
+  padding: 0.2em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.katex {
+  font-size: 1.04em;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--obs-blue);
+  transform: translateY(1px);
+}
+
+@media print {
+  html, body {
+    background: #ffffff;
+  }
+
+  .markdown-preview-view {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  a {
+    color: inherit;
+    border-bottom: 0;
+  }
+}
