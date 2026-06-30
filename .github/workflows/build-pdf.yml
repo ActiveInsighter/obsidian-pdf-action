@@ -41,12 +41,30 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          set -o pipefail
+          : > .github/latest-build-log.txt
+          echo "## npm install" | tee -a .github/latest-build-log.txt
+          npm install 2>&1 | tee -a .github/latest-build-log.txt
 
       - name: Build PDF
-        run: npm run build:pdf
+        run: |
+          set -o pipefail
+          echo "" | tee -a .github/latest-build-log.txt
+          echo "## npm run build:pdf" | tee -a .github/latest-build-log.txt
+          npm run build:pdf 2>&1 | tee -a .github/latest-build-log.txt
+
+      - name: Commit latest build log
+        if: always()
+        run: |
+          git add .github/latest-build-log.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Record latest build log [skip ci]"
+            git push
+          fi
 
       - name: Upload PDF artifact
+        if: success()
         uses: actions/upload-artifact@v7
         with:
           name: obsidian-style-pdf
