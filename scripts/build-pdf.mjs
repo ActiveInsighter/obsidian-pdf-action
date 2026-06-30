@@ -51,6 +51,16 @@ function normalizeObsidianLinks(markdown) {
     });
 }
 
+function renderObsidianHighlights(markdown) {
+  const parts = markdown.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~|`[^`\n]*`)/g);
+  return parts
+    .map((part) => {
+      if (/^```|^~~~|^`/.test(part)) return part;
+      return part.replace(/==([^=\n]+)==/g, (_, text) => `<mark>${escapeHtml(text)}</mark>`);
+    })
+    .join('');
+}
+
 function renderKatex(tex, displayMode) {
   return katex.renderToString(tex.trim(), {
     displayMode,
@@ -70,11 +80,17 @@ function protectMath(markdown) {
   }
 
   function protectPart(part) {
-    return part
-      .replace(/\\\[([\s\S]*?)\\\]/g, (_, tex) => store(tex, true))
-      .replace(/\$\$([\s\S]*?)\$\$/g, (_, tex) => store(tex, true))
-      .replace(/\\\(([\s\S]*?)\\\)/g, (_, tex) => store(tex, false))
-      .replace(/(^|[^\\])\$(?!\$)([^$\n]+?)(?<!\\)\$/g, (_, prefix, tex) => `${prefix}${store(tex, false)}`);
+    const segments = part.split(/(`[^`\n]*`)/g);
+    return segments
+      .map((segment) => {
+        if (/^`/.test(segment)) return segment;
+        return segment
+          .replace(/\\\[([\s\S]*?)\\\]/g, (_, tex) => store(tex, true))
+          .replace(/\$\$([\s\S]*?)\$\$/g, (_, tex) => store(tex, true))
+          .replace(/\\\(([\s\S]*?)\\\)/g, (_, tex) => store(tex, false))
+          .replace(/(^|[^\\])\$(?!\$)([^$\n]+?)(?<!\\)\$/g, (_, prefix, tex) => `${prefix}${store(tex, false)}`);
+      })
+      .join('');
   }
 
   const parts = markdown.split(/(```[\s\S]*?```|~~~[\s\S]*?~~~)/g);
@@ -183,7 +199,7 @@ async function main() {
   await fs.mkdir(outputDir, { recursive: true });
 
   const markdownRaw = await fs.readFile(inputPath, 'utf8');
-  const normalizedMarkdown = normalizeObsidianLinks(markdownRaw);
+  const normalizedMarkdown = renderObsidianHighlights(normalizeObsidianLinks(markdownRaw));
   const title = extractTitle(normalizedMarkdown);
   const protectedMath = protectMath(normalizedMarkdown);
 
