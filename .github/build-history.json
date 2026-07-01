@@ -1,5 +1,24 @@
 [
   {
+    "run_id": "28518449104",
+    "run_attempt": "1",
+    "run_number": "35",
+    "run_url": "https://github.com/ActiveInsighter/obsidian-pdf-action/actions/runs/28518449104",
+    "workflow": "Build Obsidian Style PDF",
+    "job": "build",
+    "actor": "ActiveInsighter",
+    "branch": "main",
+    "head_sha": "e91ed5e6415c3a74f53cc356e036a90a450b3dff",
+    "status": "running",
+    "started_at": "2026-07-01T12:45:03.578Z",
+    "finished_at": null,
+    "duration_seconds": null,
+    "build_outcome": null,
+    "artifact_outcome": null,
+    "artifact_name": "obsidian-style-pdf",
+    "log_file": ".github/latest-build-log.txt"
+  },
+  {
     "run_id": "28511662255",
     "run_attempt": "1",
     "run_number": "34",
