@@ -215,7 +215,9 @@ export async function loadManifest(manifestPath, projectRoot = process.cwd()) {
     rootRel: toPosix(path.relative(projectRoot, manifestRoot)),
     jobs,
     consume: {
-      delete_after_success: consume.delete_after_success === true
+      // main is only the build queue. Unless a manifest explicitly opts out,
+      // a successful build publishes the PDF/HTML to output and removes inbox files from main.
+      delete_after_success: consume.delete_after_success !== false
     }
   };
 }
