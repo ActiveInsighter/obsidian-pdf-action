@@ -1,0 +1,17 @@
+version: 1
+date: 2026-07-02
+title: 2026-07-02 简洁灰色主题测试
+
+theme: obsidian-inspired
+
+jobs:
+  - id: gray-theme-code-test
+    type: merge
+    title: 2026-07-02 简洁灰色主题代码高亮测试
+    inputs: all
+    sort: filename
+    page_break: true
+    output: 2026-07-02-简洁灰色主题代码高亮测试.pdf
+
+consume:
+  delete_after_success: true
