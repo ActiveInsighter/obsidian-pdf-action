@@ -1,6 +1,6 @@
 version: 1
 date: 2026-07-02
-title: 2026-07-02 Manifest Queue Actual Test
+title: 2026-07-02 Manifest Queue Actual Test Retry
 
 jobs:
   - id: selected-singles
