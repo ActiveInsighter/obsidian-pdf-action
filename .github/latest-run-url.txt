@@ -1,1 +1,1 @@
-https://github.com/ActiveInsighter/obsidian-pdf-action/actions/runs/28587412912
+https://github.com/ActiveInsighter/md-to-pdf/actions/runs/28596127773
