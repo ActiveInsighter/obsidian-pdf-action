@@ -10,6 +10,7 @@
     "build:day": "node scripts/build-day.mjs",
     "build:queue": "node scripts/build-queue.mjs",
     "validate:manifest": "node scripts/validate-manifest.mjs",
+    "cleanup:branches": "node scripts/cleanup-merged-branches.mjs",
     "ci:build": "node scripts/build-with-log.mjs"
   },
   "devDependencies": {
