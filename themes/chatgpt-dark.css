@@ -1,25 +1,29 @@
 /*
-  ChatGPT-style dark PDF theme.
-  Visual tokens sampled from the open ChatGPT Markdown rendering page on 2026-07-02.
+  ChatGPT-style pure black PDF theme.
+  Based on ChatGPT dark tokens, but all page/content/code/table block backgrounds are forced to #000.
 
   Loaded after themes/base.css and before style.css.
 */
+
+@page {
+  background: #000;
+}
 
 :root,
 :is(.print, .markdown-preview-view, .markdown-rendered),
 .pdf-theme-chatgpt-dark {
   --chatgpt-bg: #000;
-  --chatgpt-bg-soft: #212121;
-  --chatgpt-message: rgba(50, 50, 50, 0.85);
+  --chatgpt-bg-soft: #000;
+  --chatgpt-message: #000;
   --chatgpt-text: #fff;
   --chatgpt-muted: #cdcdcd;
   --chatgpt-faint: #afafaf;
-  --chatgpt-border: rgba(255, 255, 255, 0.08);
-  --chatgpt-border-strong: rgba(255, 255, 255, 0.15);
+  --chatgpt-border: rgba(255, 255, 255, 0.10);
+  --chatgpt-border-strong: rgba(255, 255, 255, 0.18);
   --chatgpt-link: #7ab7ff;
-  --chatgpt-inline-code-bg: #424242;
-  --chatgpt-code-bg: #171717;
-  --chatgpt-code-header: #2f2f2f;
+  --chatgpt-inline-code-bg: #000;
+  --chatgpt-code-bg: #000;
+  --chatgpt-code-header: #000;
   --chatgpt-code-text: #fff;
   --chatgpt-code-keyword: #f4c5c1;
   --chatgpt-code-symbol: #63a8f8;
@@ -45,12 +49,12 @@
   --ky-link: var(--chatgpt-link);
   --ky-marker: var(--chatgpt-muted);
 
-  --ky-bg: var(--chatgpt-bg);
-  --ky-bg-soft: var(--chatgpt-bg-soft);
-  --ky-bg-mute: var(--chatgpt-message);
-  --ky-bg-inline-code: var(--chatgpt-inline-code-bg);
-  --ky-bg-code: var(--chatgpt-code-bg);
-  --ky-mark-bg: #443c1e;
+  --ky-bg: #000;
+  --ky-bg-soft: #000;
+  --ky-bg-mute: #000;
+  --ky-bg-inline-code: #000;
+  --ky-bg-code: #000;
+  --ky-mark-bg: #000;
 
   --ky-border-soft: var(--chatgpt-border);
   --ky-border: var(--chatgpt-border-strong);
@@ -60,7 +64,6 @@
   --ky-radius-m: var(--chatgpt-radius);
   --ky-radius-l: var(--chatgpt-radius);
 
-  /* Match the original compact PDF typography rather than the 18px web sample. */
   --ky-font-size: 15.6px;
   --ky-line-height: 1.55;
   --ky-heading-line-height: 1.24;
@@ -93,11 +96,11 @@
 
   --table-text: #f1f1f1;
   --table-head-text: var(--chatgpt-text);
-  --table-head-bg: transparent;
+  --table-head-bg: #000;
   --table-border-strong: var(--chatgpt-border-strong);
   --table-border-soft: var(--chatgpt-border);
 
-  --callout-bg: var(--chatgpt-bg-soft);
+  --callout-bg: #000;
   --callout-border: var(--chatgpt-border-strong);
 
   color-scheme: dark !important;
@@ -109,13 +112,22 @@ body.theme-light,
 body.minimal-light,
 body.minimal-light-white,
 body.pdf-theme-chatgpt-dark {
-  background: var(--chatgpt-bg) !important;
+  min-height: 100% !important;
+  background: #000 !important;
   color: var(--chatgpt-text) !important;
+}
+
+body::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: -30mm !important;
+  z-index: -1 !important;
+  background: #000 !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) {
   color: var(--chatgpt-text) !important;
-  background: var(--chatgpt-bg) !important;
+  background: #000 !important;
   font-family: var(--chatgpt-font-sans) !important;
   font-size: var(--ky-font-size) !important;
   line-height: var(--ky-line-height) !important;
@@ -135,6 +147,7 @@ body.pdf-theme-chatgpt-dark {
   color: var(--chatgpt-text) !important;
   letter-spacing: -0.01em !important;
   border-color: var(--chatgpt-border) !important;
+  background: #000 !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) :is(a, .internal-link, .external-link) {
@@ -152,7 +165,9 @@ body.pdf-theme-chatgpt-dark {
 
 :is(.print, .markdown-preview-view, .markdown-rendered) mark {
   color: var(--chatgpt-text) !important;
-  background: var(--ky-mark-bg) !important;
+  background: #000 !important;
+  text-decoration: underline !important;
+  text-decoration-color: var(--chatgpt-border-strong) !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) hr {
@@ -162,7 +177,7 @@ body.pdf-theme-chatgpt-dark {
 
 :is(.print, .markdown-preview-view, .markdown-rendered) blockquote {
   color: var(--chatgpt-text) !important;
-  background: transparent !important;
+  background: #000 !important;
   border-left-color: var(--chatgpt-border-strong) !important;
   border-radius: 0 !important;
   font-weight: 500 !important;
@@ -170,7 +185,8 @@ body.pdf-theme-chatgpt-dark {
 
 :is(.print, .markdown-preview-view, .markdown-rendered) code {
   color: var(--chatgpt-code-text) !important;
-  background: var(--chatgpt-inline-code-bg) !important;
+  background: #000 !important;
+  border: 1px solid var(--chatgpt-border) !important;
   border-radius: 0.28em !important;
   padding: 0.08em 0.28em !important;
 }
@@ -178,20 +194,29 @@ body.pdf-theme-chatgpt-dark {
 :is(.print, .markdown-preview-view, .markdown-rendered) pre,
 :is(.print, .markdown-preview-view, .markdown-rendered) pre.hljs {
   color: var(--chatgpt-code-text) !important;
-  background: var(--chatgpt-code-bg) !important;
+  background: #000 !important;
   border: 0 !important;
   border-radius: var(--chatgpt-radius) !important;
   padding: 0.78em 0.92em !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) pre code {
-  background: transparent !important;
+  background: #000 !important;
+  border: 0 !important;
   color: inherit !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) table,
+:is(.print, .markdown-preview-view, .markdown-rendered) thead,
+:is(.print, .markdown-preview-view, .markdown-rendered) tbody,
+:is(.print, .markdown-preview-view, .markdown-rendered) tr,
+:is(.print, .markdown-preview-view, .markdown-rendered) table th,
+:is(.print, .markdown-preview-view, .markdown-rendered) table td {
+  background: #000 !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) table th,
 :is(.print, .markdown-preview-view, .markdown-rendered) table td {
-  background: transparent !important;
   border-bottom-color: var(--chatgpt-border) !important;
 }
 
@@ -207,18 +232,29 @@ body.pdf-theme-chatgpt-dark {
 :is(.print, .markdown-preview-view, .markdown-rendered) .katex,
 :is(.print, .markdown-preview-view, .markdown-rendered) .katex-display {
   color: var(--math-color) !important;
+  background: #000 !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) .callout,
 :is(.print, .markdown-preview-view, .markdown-rendered) .callout[data-callout] {
   color: var(--chatgpt-text) !important;
-  background: var(--chatgpt-bg-soft) !important;
+  background: #000 !important;
   border-left-color: var(--chatgpt-border-strong) !important;
   border-radius: var(--chatgpt-radius) !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .callout-title {
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout-title,
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout-content,
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout > :not(.callout-title) {
   color: var(--chatgpt-text) !important;
+  background: #000 !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) details,
+:is(.print, .markdown-preview-view, .markdown-rendered) summary,
+:is(.print, .markdown-preview-view, .markdown-rendered) kbd {
+  color: var(--chatgpt-text) !important;
+  background: #000 !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) input[type="checkbox"] {
@@ -230,7 +266,7 @@ body.pdf-theme-chatgpt-dark {
     max-width: 768px !important;
     margin: 28px auto !important;
     padding: 0 24px !important;
-    background: var(--chatgpt-bg) !important;
+    background: #000 !important;
     border: 0 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -238,12 +274,22 @@ body.pdf-theme-chatgpt-dark {
 }
 
 @media print {
-  html,
-  body {
-    background: var(--chatgpt-bg) !important;
+  @page {
+    background: #000;
   }
 
-  .markdown-preview-view {
-    background: var(--chatgpt-bg) !important;
+  html,
+  body,
+  .markdown-preview-view,
+  .markdown-rendered {
+    background: #000 !important;
+  }
+
+  body::before {
+    content: "" !important;
+    position: fixed !important;
+    inset: -30mm !important;
+    z-index: -1 !important;
+    background: #000 !important;
   }
 }
