@@ -8,15 +8,49 @@
 Markdown -> HTML -> CSS -> Chromium -> PDF
 ```
 
+## 分支结构
+
+本仓库只长期保留两个核心分支：
+
+```text
+main
+output
+```
+
+`main` 是源码和构建队列分支，只保存构建脚本、样式、workflow、文档和临时 `inbox` 任务。`main` 不长期保存每天的 Markdown 原文、图片、附件或生成后的 PDF。
+
+`output` 是唯一长期产物分支，用来保存生成后的 PDF、HTML 和构建日志。不要在 `output` 上改源码。
+
+临时开发或导出分支建议使用：
+
+```text
+feature/*
+fix/*
+style/*
+docs/*
+test/*
+export/*
+chore/*
+```
+
+PR 合并后，`cleanup-branches` workflow 会自动删除符合规则的同仓库临时分支，并保护 `main`、`output` 等长期分支。
+
+详细规则见：
+
+```text
+docs/branch-policy.md
+docs/workflow-guide.md
+```
+
 ## 当前推荐工作流：manifest 构建队列
 
 仓库现在支持把 `main` 当作“构建队列”使用：
 
 ```text
-内容分支 -> PR / 合并到 main -> Action 读取 inbox 里的 manifest -> 生成 PDF/HTML -> 发布到 output 分支 -> 成功后删除 inbox 任务
+内容分支 -> PR / 合并到 main -> Action 读取 inbox 里的 manifest -> 生成 PDF/HTML -> 发布到 output 分支 -> 成功后删除 inbox 任务 -> 删除已合并临时分支
 ```
 
-`main` 不再需要长期保存每天的 Markdown 原始内容。每天的临时任务放到 `inbox/` 下，构建成功后可以自动消费删除。
+`main` 不再需要长期保存每天的 Markdown 原始内容。每天的临时任务放到 `inbox/` 下，构建成功后默认自动消费删除。
 
 推荐目录：
 
@@ -69,9 +103,6 @@ jobs:
     sort: filename
     page_break: true
     output: 2026-07-02-机器学习复习合集.pdf
-
-consume:
-  delete_after_success: true
 ```
 
 完整示例见：
@@ -158,12 +189,18 @@ page_break: true
 
 用于 `merge`，表示每篇 Markdown 之间分页。
 
+### consume 策略
+
+默认不需要写 `consume`。构建成功、artifact 上传成功、`output` 分支发布成功后，Action 会删除对应的 `inbox/YYYY/MM/YYYY-MM-DD/` 任务目录。
+
+只有调试时才建议显式保留任务目录：
+
 ```yaml
 consume:
-  delete_after_success: true
+  delete_after_success: false
 ```
 
-只有构建成功、artifact 上传成功、`output` 分支发布成功后，Action 才会删除对应的 `inbox/YYYY/MM/YYYY-MM-DD/` 任务目录。失败时不会删除。
+失败时不会删除 `inbox` 任务，方便排查。
 
 ## GitHub Actions 行为
 
@@ -188,7 +225,7 @@ package.json
 ```text
 1. 上传到 Actions artifact: obsidian-style-pdf
 2. 发布到 output 分支，按日期长期保存
-3. 如果 manifest 允许消费，则删除 main 上对应 inbox 任务目录
+3. 默认删除 main 上对应 inbox 任务目录
 ```
 
 ## 手动运行
@@ -221,6 +258,12 @@ npm run build:single -- inbox/2026/07/2026-07-02/md/001-条件熵与信息增益
 
 ```bash
 npm run validate:manifest -- inbox/2026/07/2026-07-02/manifest.yml
+```
+
+### 清理已合并临时分支
+
+```bash
+npm run cleanup:branches
 ```
 
 ### 兼容旧入口
@@ -258,30 +301,3 @@ E = mc^2
 ```
 
 也兼容美元符号公式。
-
-### Obsidian Callout
-
-```markdown
-> [!NOTE] 提示
-> 这是一个提示块。
-
-> [!IMPORTANT] 重点
-> 这是一个重点块。
-```
-
-### 图片
-
-队列模式下，图片建议放在当天的 `img/` 文件夹中，然后在 Markdown 中引用：
-
-```markdown
-![示例图片](../img/example.png)
-```
-
-旧 `notes.md` 模式也仍然支持根目录 `images/` 引用。
-
-## 注意
-
-- 构建关键是 `manifest`，不是扫描全部历史 Markdown。
-- 构建成功后才会消费删除 `inbox` 任务目录。
-- 不要只依赖 artifact 长期保存 PDF，正式产物会发布到 `output` 分支。
-- 如果要全量重建历史 PDF，建议手动运行 workflow，而不是让 CSS 修改自动触发。

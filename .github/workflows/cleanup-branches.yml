@@ -1,0 +1,45 @@
+name: Cleanup Merged Branches
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Only print branches that would be deleted'
+        required: true
+        default: 'false'
+      max_pulls:
+        description: 'Recent closed PRs to scan in manual mode'
+        required: true
+        default: '100'
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: branch-cleanup-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Cleanup merged temporary branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          MAX_PULLS: ${{ github.event_name == 'workflow_dispatch' && inputs.max_pulls || '100' }}
+        run: npm run cleanup:branches
