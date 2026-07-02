@@ -18,7 +18,6 @@
 :is(.print, .markdown-preview-view, .markdown-rendered) {
   --ky-font-body: "Noto Sans CJK SC", "Source Han Sans SC", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --ky-font-heading: var(--ky-font-body);
-  --ky-font-math: "Latin Modern Math", "STIX Two Math", "Cambria Math", "Noto Serif Math", "Times New Roman", serif;
   --ky-font-mono: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", "Fira Code", "Consolas", monospace;
 
   --ky-text: #20252d;
@@ -49,18 +48,23 @@
   --ky-table-line-height: 1.38;
   --ky-image-max-height: 66mm;
 
-  --inline-code-color: #374151;
+  --inline-code-color: #384152;
   --code-normal: #2f3742;
-  --code-comment: #7c838d;
-  --code-keyword: #6d5bd0;
-  --code-string: #3f7a57;
-  --code-function: #2d7891;
-  --code-property: #8a6a35;
-  --code-tag: #5869a6;
-  --code-operator: #7a6572;
-  --code-punctuation: #6d7682;
-  --code-important: #a85f50;
-  --code-value: #4f67a5;
+  --code-comment: #858b94;
+  --code-keyword: #6f5bd7;
+  --code-string: #39745c;
+  --code-function: #2f73a7;
+  --code-property: #8a6833;
+  --code-tag: #566fb0;
+  --code-operator: #6d6673;
+  --code-punctuation: #7a828d;
+  --code-important: #a15b4e;
+  --code-value: #4f6fa8;
+  --code-deletion: #b42318;
+  --code-addition: #2f7d50;
+
+  --math-color: var(--ky-text);
+  --math-display-gap: 0.68em;
 
   color: var(--ky-text) !important;
   background: var(--ky-bg) !important;
@@ -255,14 +259,14 @@ body {
 :is(.print, .markdown-preview-view, .markdown-rendered) pre.hljs {
   color: var(--code-normal) !important;
   background: var(--ky-bg-code) !important;
-  border: 0 !important;
+  border: 1px solid var(--code-border, var(--ky-border-soft)) !important;
   border-radius: var(--ky-radius-l) !important;
   box-shadow: none !important;
   margin: var(--ky-block-gap) 0 !important;
-  padding: 0.74em 0.88em !important;
+  padding: 0.78em 0.92em !important;
   font-family: var(--ky-font-mono) !important;
   font-size: 0.91em !important;
-  line-height: 1.46 !important;
+  line-height: 1.48 !important;
   letter-spacing: 0 !important;
   white-space: pre-wrap !important;
   word-break: break-word !important;
@@ -280,50 +284,36 @@ body {
   font: inherit !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-comment,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-quote {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-comment, .hljs-quote) {
   color: var(--code-comment) !important;
   font-style: italic !important;
   font-weight: 400 !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-keyword,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-selector-tag,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-built_in,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-name {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name, .hljs-doctag) {
   color: var(--code-keyword) !important;
   font-weight: 650 !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-string,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-char,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-attr,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-template-variable {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-string, .hljs-char, .hljs-regexp, .hljs-template-variable) {
   color: var(--code-string) !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-title,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-title.function_,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-title.class_ {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-title, .hljs-title.function_, .hljs-function .hljs-title, .hljs-title.class_, .hljs-section) {
   color: var(--code-function) !important;
-  font-weight: 560 !important;
+  font-weight: 580 !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-attribute,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-variable,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-params {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-attribute, .hljs-variable, .hljs-params, .hljs-property, .hljs-meta .hljs-keyword) {
   color: var(--code-property) !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-tag,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-selector-id,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-selector-class {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-tag, .hljs-selector-id, .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo) {
   color: var(--code-tag) !important;
   font-weight: 560 !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-operator,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-link {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-operator, .hljs-link, .hljs-meta) {
   color: var(--code-operator) !important;
 }
 
@@ -331,11 +321,16 @@ body {
   color: var(--code-punctuation) !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-number,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-literal,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-symbol,
-:is(.print, .markdown-preview-view, .markdown-rendered) .hljs-bullet {
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-number, .hljs-literal, .hljs-symbol, .hljs-bullet) {
   color: var(--code-value) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-deletion) {
+  color: var(--code-deletion) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(.hljs-addition) {
+  color: var(--code-addition) !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) img,
@@ -377,7 +372,7 @@ body {
 :is(.print, .markdown-preview-view, .markdown-rendered) table th,
 :is(.print, .markdown-preview-view, .markdown-rendered) table td {
   min-width: 0 !important;
-  padding: 0.36em 0.52em !important;
+  padding: 0.42em 0.56em !important;
   text-align: left !important;
   vertical-align: top !important;
   white-space: normal !important;
@@ -419,20 +414,45 @@ body {
   margin-bottom: 0.18em !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) :is(.katex-display, mjx-container[display="true"], .math-block) {
+/* Math: keep KaTeX's native font stack intact. Do not override .katex font-family. */
+:is(.print, .markdown-preview-view, .markdown-rendered) .katex {
+  color: var(--math-color) !important;
+  text-rendering: geometricPrecision !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) .katex-display {
   max-width: 100% !important;
-  margin: 0.48em 0 !important;
-  overflow: visible !important;
-  color: var(--ky-text) !important;
-  font-family: var(--ky-font-math) !important;
-  font-size: 0.98em !important;
-  letter-spacing: 0 !important;
+  margin: var(--math-display-gap) 0 !important;
+  padding: 0.12em 0 0.18em !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  color: var(--math-color) !important;
+  line-height: 1.35 !important;
   break-inside: avoid !important;
   page-break-inside: avoid !important;
 }
 
-:is(.print, .markdown-preview-view, .markdown-rendered) :is(.katex, mjx-container, .math, .math-inline) {
-  font-family: var(--ky-font-math) !important;
+:is(.print, .markdown-preview-view, .markdown-rendered) .katex-display > .katex {
+  display: inline-block !important;
+  max-width: 100% !important;
+  font-size: 1.02em !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :not(pre) > code .katex,
+:is(.print, .markdown-preview-view, .markdown-rendered) table .katex {
+  font-size: 0.98em !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) table .katex-display {
+  margin: 0.28em 0 !important;
+  padding: 0.08em 0 !important;
+  line-height: 1.32 !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(mjx-container, .math, .math-inline, .math-block) {
+  color: var(--math-color) !important;
 }
 
 :is(.print, .markdown-preview-view, .markdown-rendered) .callout,
