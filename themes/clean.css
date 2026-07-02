@@ -1,6 +1,6 @@
 /*
   Default clean PDF theme.
-  Goal: slightly more breathing room, stable Chinese typography, and soft code colors on the same light code background.
+  Goal: slightly more breathing room, stable Chinese typography, soft code colors, and native KaTeX math typography.
 */
 
 :root,
@@ -42,18 +42,25 @@
   --ky-table-line-height: 1.38;
   --ky-image-max-height: 66mm;
 
-  --inline-code-color: #3d4652;
-  --code-normal: #2f3742;
-  --code-comment: #858b94;
-  --code-keyword: #6b5fd6;
-  --code-string: #3f7a57;
-  --code-function: #2f7f9f;
-  --code-property: #8a6a35;
-  --code-tag: #5c6fa8;
-  --code-operator: #73606d;
-  --code-punctuation: #717b87;
-  --code-important: #a85f50;
-  --code-value: #516ba7;
+  /* Light, coordinated code palette on the unchanged #f7f7f8 background. */
+  --inline-code-color: #3b4656;
+  --code-normal: #2e3642;
+  --code-comment: #8c94a1;
+  --code-keyword: #6f4fc9;
+  --code-string: #2f7d5c;
+  --code-function: #256fa8;
+  --code-property: #8b6b2f;
+  --code-tag: #5c6fae;
+  --code-operator: #756978;
+  --code-punctuation: #7a838f;
+  --code-important: #a85b4a;
+  --code-value: #4f67a5;
+  --code-deletion: #b42318;
+  --code-addition: #2f7d50;
+  --code-border: #e7e9ee;
+
+  --math-color: #1f2937;
+  --math-display-gap: 0.72em;
 
   --table-text: var(--ky-text-soft);
   --table-head-text: var(--ky-text);
