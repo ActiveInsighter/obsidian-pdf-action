@@ -1,0 +1,198 @@
+/*
+  ChatGPT-style light PDF theme.
+  Visual tokens sampled from the open ChatGPT Markdown rendering page on 2026-07-02.
+
+  This file is loaded after themes/base.css and before style.css.
+  It maps ChatGPT-like design tokens onto the project-wide --ky-* PDF tokens.
+*/
+
+:root,
+:is(.print, .markdown-preview-view, .markdown-rendered),
+.pdf-theme-chatgpt-light {
+  --chatgpt-bg: #fcfcfc;
+  --chatgpt-bg-soft: #f9f9f9;
+  --chatgpt-message: rgba(233, 233, 233, 0.5);
+  --chatgpt-text: #0d0d0d;
+  --chatgpt-muted: #5d5d5d;
+  --chatgpt-faint: #8f8f8f;
+  --chatgpt-border: rgba(0, 0, 0, 0.08);
+  --chatgpt-border-strong: rgba(0, 0, 0, 0.15);
+  --chatgpt-link: #2964aa;
+  --chatgpt-inline-code-bg: #ececec;
+  --chatgpt-code-bg: #f7f7f8;
+  --chatgpt-code-header: #ededed;
+  --chatgpt-code-text: #0d0d0d;
+  --chatgpt-code-keyword: #ac5048;
+  --chatgpt-code-symbol: #1f4e94;
+  --chatgpt-code-name: #643cae;
+  --chatgpt-code-title: #ac4f23;
+  --chatgpt-code-comment: #6f6f6f;
+  --chatgpt-code-string: #0f7b6c;
+  --chatgpt-code-number: #8f4e00;
+  --chatgpt-radius: 7px;
+  --chatgpt-font-sans: -apple-system-body, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --chatgpt-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", "JetBrains Mono", "Cascadia Code", monospace;
+
+  --ky-page-margin: 14mm 15mm 17mm 15mm;
+  --ky-font-body: var(--chatgpt-font-sans);
+  --ky-font-heading: var(--chatgpt-font-sans);
+  --ky-font-mono: var(--chatgpt-font-mono);
+
+  --ky-text: var(--chatgpt-text);
+  --ky-text-soft: #262626;
+  --ky-muted: var(--chatgpt-muted);
+  --ky-faint: var(--chatgpt-faint);
+  --ky-heading: var(--chatgpt-text);
+  --ky-link: var(--chatgpt-link);
+  --ky-marker: #5d5d5d;
+
+  --ky-bg: var(--chatgpt-bg);
+  --ky-bg-soft: var(--chatgpt-bg-soft);
+  --ky-bg-mute: var(--chatgpt-message);
+  --ky-bg-inline-code: var(--chatgpt-inline-code-bg);
+  --ky-bg-code: var(--chatgpt-code-bg);
+  --ky-mark-bg: #fff3bd;
+
+  --ky-border-soft: var(--chatgpt-border);
+  --ky-border: var(--chatgpt-border-strong);
+  --ky-border-strong: rgba(0, 0, 0, 0.24);
+  --ky-accent: #5d5d5d;
+  --ky-radius-s: 5px;
+  --ky-radius-m: var(--chatgpt-radius);
+  --ky-radius-l: var(--chatgpt-radius);
+
+  --ky-font-size: 18px;
+  --ky-line-height: 1.625;
+  --ky-heading-line-height: 1.25;
+  --ky-para-gap: 0.68em;
+  --ky-block-gap: 0.9em;
+  --ky-tight-gap: 0.16em;
+  --ky-list-gap: 0.14em;
+  --ky-table-font-size: 0.93em;
+  --ky-table-line-height: 1.48;
+  --ky-image-max-height: 68mm;
+
+  --inline-code-color: var(--chatgpt-code-text);
+  --code-normal: var(--chatgpt-code-text);
+  --code-comment: var(--chatgpt-code-comment);
+  --code-keyword: var(--chatgpt-code-keyword);
+  --code-string: var(--chatgpt-code-string);
+  --code-function: var(--chatgpt-code-title);
+  --code-property: var(--chatgpt-code-name);
+  --code-tag: var(--chatgpt-code-symbol);
+  --code-operator: var(--chatgpt-code-symbol);
+  --code-punctuation: #4b5563;
+  --code-important: var(--chatgpt-code-keyword);
+  --code-value: var(--chatgpt-code-number);
+  --code-deletion: #b42318;
+  --code-addition: #0f7b6c;
+  --code-border: var(--chatgpt-border);
+
+  --math-color: var(--chatgpt-text);
+  --math-display-gap: 0.86em;
+
+  --table-text: #222222;
+  --table-head-text: var(--chatgpt-text);
+  --table-head-bg: var(--chatgpt-bg-soft);
+  --table-border-strong: var(--chatgpt-border-strong);
+  --table-border-soft: var(--chatgpt-border);
+
+  --callout-bg: var(--chatgpt-bg-soft);
+  --callout-border: var(--chatgpt-border-strong);
+
+  color-scheme: light !important;
+}
+
+html,
+body,
+body.theme-light,
+body.minimal-light,
+body.minimal-light-white {
+  background: var(--chatgpt-bg) !important;
+  color: var(--chatgpt-text) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) {
+  color: var(--chatgpt-text) !important;
+  background: var(--chatgpt-bg) !important;
+  font-family: var(--chatgpt-font-sans) !important;
+  font-size: var(--ky-font-size) !important;
+  line-height: var(--ky-line-height) !important;
+  letter-spacing: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) > :first-child {
+  margin-top: 0 !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--chatgpt-text) !important;
+  letter-spacing: -0.01em !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) h1 {
+  border-bottom-color: var(--chatgpt-border) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) :is(a, .internal-link, .external-link) {
+  color: var(--chatgpt-link) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) blockquote {
+  color: var(--chatgpt-muted) !important;
+  background: var(--chatgpt-bg-soft) !important;
+  border-left-color: var(--chatgpt-border-strong) !important;
+  border-radius: 0 var(--chatgpt-radius) var(--chatgpt-radius) 0 !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) code {
+  color: var(--chatgpt-code-text) !important;
+  background: var(--chatgpt-inline-code-bg) !important;
+  border-radius: 0.28em !important;
+  padding: 0.08em 0.28em !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) pre,
+:is(.print, .markdown-preview-view, .markdown-rendered) pre.hljs {
+  color: var(--chatgpt-code-text) !important;
+  background: var(--chatgpt-code-bg) !important;
+  border-color: var(--chatgpt-border) !important;
+  border-radius: var(--chatgpt-radius) !important;
+  padding: 0.82em 0.95em !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) table th {
+  background: var(--chatgpt-bg-soft) !important;
+  color: var(--chatgpt-text) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout,
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout[data-callout] {
+  background: var(--chatgpt-bg-soft) !important;
+  border-left-color: var(--chatgpt-border-strong) !important;
+  border-radius: var(--chatgpt-radius) !important;
+}
+
+:is(.print, .markdown-preview-view, .markdown-rendered) .callout-title {
+  color: var(--chatgpt-text) !important;
+}
+
+@media screen {
+  .markdown-preview-view {
+    max-width: 768px !important;
+    margin: 28px auto !important;
+    padding: 0 24px !important;
+    background: var(--chatgpt-bg) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: var(--chatgpt-bg) !important;
+  }
+}
